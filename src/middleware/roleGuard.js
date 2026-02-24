@@ -8,7 +8,7 @@ const requireRole = (...roles) => {
         }
 
         //Cek apakah role user ada di daftar role yg diizinkan
-        if(!roles.includes(req.user.roles)){
+        if(!roles.includes(req.user.role)){
             return res.status(403).json({
                 success: false, 
                 message: `Akses ditolak. Hanya ${roles.join(' atau ')} yang diizinkan`

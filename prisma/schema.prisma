@@ -27,6 +27,7 @@ model Car {
   price       Float
   plateNumber String?
   description String?
+  image String? // tambahkan ini (path foto/video)
   status      String   @default("READY")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

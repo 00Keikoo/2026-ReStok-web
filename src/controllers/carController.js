@@ -33,10 +33,17 @@ async function getCarById(req, res) {
 
 async function createCar(req, res) {
   try {
+    console.log('body', req.body)
+    console.log('file: ', req.file)
+    
     const { brand, model, type, transmisi, year, color, price, plateNumber, description } = req.body
     if (!brand || !model || !type || !transmisi || !year || !color || !price) {
       return res.status(400).json({ success: false, message: 'Brand, model, year, color, dan price wajib diisi.' })
     }
+
+    // Kalau ada file yang diupload, simpan pathnya
+    const image = req.file ? `/uploads/${req.file.filename}` : null
+
     const car = await prisma.car.create({
       data: {
         brand, 
@@ -48,6 +55,7 @@ async function createCar(req, res) {
         price: parseFloat(price),
         plateNumber: plateNumber || null,
         description: description || null,
+        image 
       }
     })
     res.status(201).json({ success: true, message: 'Mobil berhasil ditambahkan.', data: car })

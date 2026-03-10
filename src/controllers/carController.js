@@ -89,6 +89,42 @@ async function createCar(req, res) {
   }
 }
 
+const updateCar = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id)
+    const { brand, model, type, transmisi, year, color, price, plateNumber, description } = req.body
+
+    const car = await prisma.car.findUnique({ where: {id} })
+    if(!car) return res.status(404).json({
+      success: false,
+      message: 'Mobil tidak ditemukan'
+    })
+
+    const updated = await prisma.car.update({
+      where: { id },
+      data: {
+        brand, model, type, transmisi, color,
+        year: parseInt(year),
+        price: parseFloat(price),
+        plateNumber: plateNumber || null,
+        description: description || null
+      },
+      include: { media: true }
+    })
+
+    res.json({ 
+      success: true,
+      message: 'Mobil berhasil diupdate.',
+      data: updated
+    })
+  } catch(error){
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
 async function updateCarStatus(req, res) {
   try {
     const id = parseInt(req.params.id)
@@ -130,4 +166,4 @@ async function deleteCar(req, res) {
   }
 }
 
-module.exports = { getAllCars, getCarById, createCar, updateCarStatus, deleteCar }
+module.exports = { getAllCars, getCarById, createCar, updateCar, updateCarStatus, deleteCar }

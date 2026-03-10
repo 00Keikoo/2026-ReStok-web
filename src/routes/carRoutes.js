@@ -14,6 +14,7 @@ router.get('/:id', authenticate, carController.getCarById)
 router.get('/', authenticate, carController.getAllCars)
 router.get('/:id', authenticate, carController.getCarById)
 router.post('/', authenticate, requireAdmin, upload.array('media', 10), carController.createCar)
+router.post('/:id', authenticate, requireAdmin, carController.updateCar)
 router.patch('/:id/status', authenticate, requireAdmin, carController.updateCarStatus)
 router.delete('/:id', authenticate, requireAdmin, carController.deleteCar)
 

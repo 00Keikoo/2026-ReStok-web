@@ -5,8 +5,6 @@ const { generateToken } = require('../config/jwt')
 // --Register--
 async function register(req, res){
     try{
-        console.log('register dipanggil')
-        console.log('body:', req.body)
         const { name, email, password, role } = req.body
         
         // validasi field wajib

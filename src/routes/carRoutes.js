@@ -11,7 +11,9 @@ router.get('/', authenticate, carController.getAllCars)
 router.get('/:id', authenticate, carController.getCarById)
 
 //Admin only - butuh token + role ADMIN
-router.post('/', authenticate, requireAdmin, upload.single('image'), carController.createCar)
+router.get('/', authenticate, carController.getAllCars)
+router.get('/:id', authenticate, carController.getCarById)
+router.post('/', authenticate, requireAdmin, upload.array('media', 10), carController.createCar)
 router.patch('/:id/status', authenticate, requireAdmin, carController.updateCarStatus)
 router.delete('/:id', authenticate, requireAdmin, carController.deleteCar)
 

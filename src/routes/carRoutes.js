@@ -5,16 +5,13 @@ const authenticate = require('../middleware/auth')
 const { requireAdmin } = require('../middleware/roleGuard')
 const upload = require('../config/multer')
 
-
-//Admin & Sales - Hanya butuh token
+// Admin & Sales
 router.get('/', authenticate, carController.getAllCars)
 router.get('/:id', authenticate, carController.getCarById)
 
-//Admin only - butuh token + role ADMIN
-router.get('/', authenticate, carController.getAllCars)
-router.get('/:id', authenticate, carController.getCarById)
+// Admin only
 router.post('/', authenticate, requireAdmin, upload.array('media', 10), carController.createCar)
-router.post('/:id', authenticate, requireAdmin, carController.updateCar)
+router.put('/:id', authenticate, requireAdmin, carController.updateCar)
 router.patch('/:id/status', authenticate, requireAdmin, carController.updateCarStatus)
 router.delete('/:id', authenticate, requireAdmin, carController.deleteCar)
 

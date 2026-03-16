@@ -147,6 +147,12 @@ async function updateCarStatus(req, res) {
       include: { media: true } 
     })
 
+    // Broadcast ke semua client WebSocket
+    const broadcast = req.app.get('broadcast')
+    if(broadcast){
+      broadcast({ type: 'STATUS_UPDATED', carId: id, status: updated.status})
+    }
+
     res.json({ success: true, message: `Status berhasil diubah jadi ${updated.status}.`, data: updated })
   } catch (error) {
     res.status(500).json({ success: false, message: error.message })

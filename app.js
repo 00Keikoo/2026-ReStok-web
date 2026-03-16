@@ -21,6 +21,15 @@ const carRoutes = require('./src/routes/carRoutes')
 app.use('/api/auth', authRoutes)
 app.use('/api/cars', carRoutes)
 
+app.use((err, req, res, next) => {
+    if(err.code === 'LIMIT_UNEXPECTED_FILE'){
+        return res.status(400).json({
+            success: false,
+            message: `Field tidak dikenal: ${err.field}`
+        })
+    }
+})
+
 app.listen(PORT, () => {
     console.log(`Server jalan di http://localhost:${PORT}`)
 })

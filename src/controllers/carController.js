@@ -166,4 +166,60 @@ async function deleteCar(req, res) {
   }
 }
 
-module.exports = { getAllCars, getCarById, createCar, updateCar, updateCarStatus, deleteCar }
+const addMedia = async (req, res) => {
+  try{
+    const carId = parseInt(req.params.id)
+    const car = await prisma.car.findUnique({ where: { id: carId }})
+    if(!car) return res.status(400).json({
+      success: false,
+      message: 'Tidak ada file yang diupload.'
+    })
+
+    const mediaData = req.files.map(file => ({
+      carId,
+      url: `/uploads/${file.filename}`,
+      type: file.mimetype.startsWith('video') ?  'video' : 'image'
+    }))
+
+    await prisma.carMedia.createMany({ data: mediaData })
+
+    const updated = await prisma.car.findUnique({
+      where: { id: carId },
+      include: { media: true }
+    })
+
+    res.json({
+      success: true,
+      message: 'Media berhasil ditambahkan,',
+      data: updated
+    })
+
+  } catch (error){
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+
+}
+
+const deleteMedia = async (req, res) => {
+  try{
+    const mediaId = parseInt(req.params.mediaId)
+    const media = await prisma.carMedia.findUnique({ where: { id: mediaId } })
+    if(!media) return res.status(404).json({
+      success: false,
+      message: 'Media tidak ditemukan!'
+    })
+
+    await prisma.carMedia.delete({ where: { id: mediaId } })
+
+    res.json({
+      success: true, message: 'Media berhasil dihapus.'
+    })
+  } catch (error) {
+    res.status(500).json({ success: false , message: error.message})
+  }
+}
+
+module.exports = { getAllCars, getCarById, createCar, updateCar, updateCarStatus, deleteCar, addMedia, deleteMedia }

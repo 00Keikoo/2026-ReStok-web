@@ -51,5 +51,5 @@ app.use((err, req, res, next) => {
     next(err)
 })
 
-const PORT = 3000
+const PORT = ProcessingInstruction.env.PORT || 3000
 server.listen(PORT, () => console.log(`Server jalan di http://localhost:${PORT}`))

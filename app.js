@@ -29,7 +29,13 @@ const broadcast = (data) => {
 // Export broadcast supaya bisa dipakai controller
 app.set('broadcast', broadcast)
 
-app.use(cors({ origin: ['http://localhost:5173'] }))
+app.use(cors({
+    origin: [
+        'http://localhost:5173',
+        'https://2026-restok-client-production.up.railway.app'
+    ],
+    credentials: true
+}))
 app.use(express.json())
 app.use('/uploads', express.static(path.join(__dirname, 'src/uploads')))
 
